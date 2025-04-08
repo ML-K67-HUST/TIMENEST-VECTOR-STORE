@@ -17,7 +17,7 @@ RUN mkdir -p /app/data && chmod 777 /app/data
 
 COPY . .
 
-ENV PYTHONPATH="/app:${PYTHONPATH}"
+# ENV PYTHONPATH="/app:${PYTHONPATH}"
 ENV EMBEDDING_MODEL_PATH="/app/bge_model_ctranslate2"
 ENV CHROMA_PATH="/app/data"
 
