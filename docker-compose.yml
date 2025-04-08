@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  vector-store:
+    build: .
+    ports:
+      - "8003:8003"
+    volumes:
+      - vector_store_data:/app/data
+    environment:
+      - EMBEDDING_MODEL_PATH=/app/bge_model_ctranslate2
+      - MILVUS_URI=${MILVUS_URI}
+      - MILVUS_TOKEN=${MILVUS_TOKEN}
+
+volumes:
+  vector_store_data:
+    driver: local 
