@@ -32,7 +32,7 @@ class MilvusClient:
     def list_collections(self) -> List[str]:
         return utility.list_collections()
 
-    def create_collection(self, name: str, dim: int = 768):
+    def create_collection(self, name: str, dim: int = 1024):
         if utility.has_collection(name):
             return Collection(name)
         
@@ -109,14 +109,19 @@ class MilvusClient:
         self._embedding_cache[text] = embedding
         return embedding
 
-    def _get_cached_rerank(self, query: str, texts: List[str]) -> List[int]:
-        cache_key = f"{query}:{','.join(texts)}"
+    def _get_cached_rerank(self, query: str, texts:Dict) -> List[int]:
+        # print(1.1)
+        cache_key = f"{query}:{str(texts)}"
+        # print(1.2)
         if cache_key in self._rerank_cache:
             return self._rerank_cache[cache_key]
-        
-        indices = rerank_results(query, texts)
-        self._rerank_cache[cache_key] = indices
-        return indices
+        # print(1.3)
+        # print(query)
+        # print(texts)
+        reraked_documents = rerank_results(query, texts)
+        # print(reraked_documents)
+        self._rerank_cache[cache_key] = str(reraked_documents)
+        return reraked_documents
 
     def _load_collection(self, collection: Collection):
         collection_name = collection.name
@@ -187,12 +192,16 @@ class MilvusClient:
                     })
             
             if rerank and formatted_results:
-                texts = [item["text"] for item in formatted_results]
+                # texts = [item["text"] for item in formatted_results]
                 
-                reranked_indices = self._get_cached_rerank(query_texts[0], texts)
+                # reranked_indices = self._get_cached_rerank(query_texts[0], texts)
                 
-                reranked_results = [formatted_results[i] for i in reranked_indices]
-                
+                # reranked_results = [formatted_results[i] for i in reranked_indices]
+                # print(1)
+                # print(query_texts)
+                # print(formatted_results)
+                reranked_results= self._get_cached_rerank(query=query_texts[0], texts=formatted_results)
+                # print(2)
                 for item in reranked_results:
                     item["reranked"] = True
                     

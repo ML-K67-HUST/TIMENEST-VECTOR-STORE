@@ -6,12 +6,12 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN python -c "from sentence_transformers import CrossEncoder; CrossEncoder('BAAI/bge-reranker-base')"
+# RUN python -c "from sentence_transformers import CrossEncoder; CrossEncoder('BAAI/bge-reranker-base')"
 
-RUN mkdir -p /app/bge_model_ctranslate2 && \
-    python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretrained('BAAI/bge-base-en-v1.5')" && \
-    pip install -U ctranslate2 && \
-    ct2-transformers-converter --model BAAI/bge-base-en-v1.5 --output_dir /app/bge_model_ctranslate2 --force
+# RUN mkdir -p /app/bge_model_ctranslate2 && \
+    # python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretrained('BAAI/bge-base-en-v1.5')" && \
+    # pip install -U ctranslate2 && \
+    # ct2-transformers-converter --model BAAI/bge-m3 --output_dir /app/bge_model_ctranslate2 --force
 
 RUN mkdir -p /app/data && chmod 777 /app/data
 
